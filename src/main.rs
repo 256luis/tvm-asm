@@ -37,7 +37,7 @@ struct Instruction {
     operand: Option<u32>,
 }
 
-fn line_to_instruction(line: &String) -> Result<Instruction, String> {
+fn line_to_instruction(line: &str) -> Result<Instruction, String> {
     let tokens: Vec<String> = line.split(' ').map(|x| x.to_string()).collect();
     let opcode_string = tokens.get(0).unwrap().as_str();
     
@@ -72,7 +72,7 @@ fn line_to_instruction(line: &String) -> Result<Instruction, String> {
     }?;
 
     // extract operand (if applicable)
-    let mut operand: Option<u32> = None;
+    let operand: Option<u32>;
     {
         match opcode {
             // must have operand
@@ -110,10 +110,7 @@ fn line_to_instruction(line: &String) -> Result<Instruction, String> {
         };
     }
     
-    Ok(Instruction {
-        opcode,
-        operand,
-    })
+    Ok(Instruction{opcode, operand})
 }
 
 fn main() {
@@ -149,7 +146,7 @@ fn main() {
     // main compilation loop
     for line in source_lines.iter() {
         // convert each line to Instructions
-        let inst = match line_to_instruction(&line.trim().to_string()) {
+        let inst = match line_to_instruction(line.trim()) {
             Ok(i) => i,
             Err(msg) => {
                 println!("ERROR: {}", msg);
@@ -170,5 +167,5 @@ fn main() {
 
     // write bytes to file
     let mut output_file = File::create("out.bin").unwrap();
-    output_file.write_all(&output_bytes[..]);
+    output_file.write_all(&output_bytes).unwrap();
 }

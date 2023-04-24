@@ -1,7 +1,0 @@
-pushl 65
-pushl 66
-pushl 67
-out
-out
-out
-halt
